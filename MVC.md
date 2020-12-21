@@ -4,16 +4,16 @@ MVC
 ## 1. Model
 ```swift
 class Model {
-    let color: UIColor
-    init(color: UIColor) {
-        self.color = color
+    let text: String
+    init(text: String) {
+        self.text = text
     }
 }
 ```
 
 ## 2. View
 ```swift
-class CustomTextLabel: UIView {
+class CustomTextLabel: UILabel {
     override class func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -32,7 +32,7 @@ class ViewController: UIViewController, Bindable {
     }
     
     func bindModel() {
-        customLabel.backgroundColor = model.color
+        customLabel.text = model.text
         self.view.addSubview(customLabel)
     }
 }
@@ -57,6 +57,13 @@ extension Bindable where Self: UIViewController {
 
 ## 5. SceneDelegate 
 ```swift
+//
+//  SceneDelegate.swift
+//  test
+//
+//  Created by mmxsound on 2020/12/21.
+//
+
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -72,7 +79,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
         
-        let data = Model(color: .blue)
+        let data = Model(text: "hello world")
         let navigation = UINavigationController()
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
