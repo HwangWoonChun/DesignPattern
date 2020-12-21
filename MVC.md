@@ -22,18 +22,18 @@ class CustomTextLabel: UILabel {
 
 ## 3. ViewController
 ```swift
-class ViewController: UIViewController, Bindable {
+class ViewController: UIViewController {
     
     var model: Model!
-    var customLabel: CustomTextLabel = CustomTextLabel(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
+    var customLabel: CustomTextLabel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    func bindModel() {
-        customLabel.text = model.text
-        self.view.addSubview(customLabel)
+        
+        self.model = Model(text: "hello world")
+        customLabel = CustomTextLabel(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
+        customLabel?.text = model.text
+        self.view.addSubview(self.customLabel!)
     }
 }
 ```
