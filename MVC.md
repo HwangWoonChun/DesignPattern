@@ -196,3 +196,55 @@ extension ViewController: ViewModelDelegate {
     }
 }
 ```
+MVVM + RX
+===========
+## 1. MODEL
+```swift
+class Model {
+    var text: String
+    init(text: String) {
+        self.text = text
+    }
+}
+```
+## 2. VIEW MODEL
+```swift
+import RxSwift
+
+class ViewModel {
+    var model: Model?
+    let subject = PublishSubject<String>()
+
+    init(model: Model) {
+        self.model = model
+    }
+
+    func changeModel(string: String) {
+        self.model?.text = string
+        self.subject.onNext(string)
+    }
+}
+
+```
+## 3. ViewController 
+```swift
+class ViewController: UIViewController {
+
+    @IBOutlet var label: UILabel!
+    var viewModel: ViewModel?
+    let disposeBag = DisposeBag()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.viewModel = ViewModel(model: Model(text: "hello world"))
+        
+        self.viewModel?.subject.subscribe(onNext: { string in
+            self.label.text = string
+        }).disposed(by: disposeBag)
+    }
+    
+    @IBAction func touchedButton1(sender: Any) {
+        self.viewModel?.changeModel(string: "HI")
+    }
+}
+```
