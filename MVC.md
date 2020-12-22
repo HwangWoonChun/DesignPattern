@@ -72,3 +72,67 @@ class ViewController: UIViewController {
 
 }
 ```
+
+
+Delegate
+===========
+## 1. ViewController
+```swift
+class ViewController: UIViewController {
+    
+    @IBOutlet var label: UILabel!
+    @IBOutlet var tableView: UITableView!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let nib = UINib(nibName: "CustomCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: "CustomCell")
+        // Do any additional setup after loading the view.
+    }
+
+}
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell") as! CustomCell
+        cell.label.text = "\(indexPath.row)"
+        cell.delegate = self
+        return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
+}
+
+extension ViewController: CustomCellDelegate {
+    func changeText(string: String) {
+        self.label.text = string
+    }
+}
+
+```
+## 2. CustomCell
+```swift
+protocol CustomCellDelegate {
+    func changeText(string: String)
+}
+
+class CustomCell : UITableViewCell {
+
+    @IBOutlet weak var label: UILabel!
+    var delegate: CustomCellDelegate?
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
+    
+    @IBAction func touchedButton(sender: Any) {
+        delegate?.changeText(string: "changed Text")
+    }
+
+}
+
+```
