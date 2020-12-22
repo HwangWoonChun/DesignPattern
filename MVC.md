@@ -136,3 +136,63 @@ class CustomCell : UITableViewCell {
 }
 
 ```
+
+
+MVVM
+===========
+## 1. MODEL
+```swift
+class Model {
+    var text: String
+    init(text: String) {
+        self.text = text
+    }
+}
+```
+## 2. MVVM
+```swift
+protocol ViewModelDelegate {
+    func bindModel(to text: String?)
+}
+
+class ViewModel {
+    var model: Model?
+    var delegate: ViewModelDelegate?
+
+    init(model: Model) {
+        self.model = model
+    }
+
+    func changeModel(string: String) {
+        self.model?.text = string
+        self.delegate?.bindModel(to: string)
+    }
+}
+```
+## 3. ViewController
+```swift
+class ViewController: UIViewController {
+
+    @IBOutlet var label: UILabel!
+    var viewModel: ViewModel?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.viewModel = ViewModel(model: Model(text: "hello world"))
+        self.viewModel?.delegate = self
+    }
+    
+    @IBAction func touchedButton1(sender: Any) {
+        self.viewModel?.changeModel(string: "button1")
+    }
+    @IBAction func touchedButton2(sender: Any) {
+        self.viewModel?.changeModel(string: "button2")
+    }
+}
+
+extension ViewController: ViewModelDelegate {
+    func bindModel(to text: String?) {
+        self.label.text = text
+    }
+}
+```
