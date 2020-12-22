@@ -28,3 +28,47 @@ class ViewController: UIViewController {
     }
 }
 ```
+
+MVP
+===========
+
+## 1. Model
+```swift
+class Model {
+    let text: String
+    init(text: String) {
+        self.text = text
+    }
+}
+```
+
+## 2. Presenter
+```swift
+class Presenter {
+    var model: Model?
+    
+    init(model: Model?) {
+        if model?.text.count ?? 0 > 5 {
+            self.model = model
+        }
+    }
+    
+}
+```
+
+## 3. View(ViewController)
+```swift
+class ViewController: UIViewController {
+    
+    @IBOutlet var label: UILabel!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let presenter = Presenter(model: Model(text: "Hel"))
+        label.text = presenter.model?.text
+        // Do any additional setup after loading the view.
+    }
+
+}
+```
